@@ -1,0 +1,126 @@
+INCLUDE := $(INCLUDE) -DPNG_STATIC
+CC       = gcc
+CXX      = g++
+CXXFLAGS = -I$(GLT_HOME)/src $(INCLUDE) -g # -O3 -DNDEBUG -finline-functions -ffast-math -fomit-frame-pointer -funroll-loops # -g
+CXXLIBS  = $(LIBS)
+
+CFLAGS   = $(CXXFLAGS)
+
+BIN      = $(GLT_HOME)/bin
+LIB      = $(GLT_HOME)/lib
+
+ifdef WINDIR
+EXE      = .exe
+else
+EXE      =
+CXXFLAGS += -I/usr/X11R6/include/ 
+endif
+
+#
+#
+
+OBJECTS     = $(CPP_SRC:.cpp=.o) $(C_SRC:.c=.o) $(ASM_SRC:.s=.o)
+DEPENDS     = $(OBJECTS:.o=.d)
+PROGRAMS    = $(CPP_SRC:.cpp=) $(C_SRC:.c=)
+SOURCES     = $(CPP_SRC) $(C_SRC) $(ASM_SRC)
+
+MAKEDEP     = $(CXX) $(CXXFLAGS) -M
+
+-include *.d
+
+%.o: %.cpp
+	printf "Compiling  %-25s\n" $*.cpp
+	$(CXX) $(CXXFLAGS) -c $*.cpp 
+
+%.o: %.c
+	@printf "Compiling  %-25s\n" $*.c
+	$(CC) $(CFLAGS) -c $*.c 
+
+%.o: %.s
+	@printf "Compiling  %-25s\n" $*.s
+	$(CXX) $(CXXFLAGS) -c $*.s 
+	
+%.d: %.c
+	@printf "Makedepend %-25s\n" $*.c
+	@set -e; $(MAKEDEP) $< | sed 's/\($*\)\.o[ :]*/\1.o $@ : /g' > $@; [ -s $@ ] || rm -f $@
+
+
+%.d: %.cpp
+	@printf "Makedepend %-25s\n" $*.cpp
+	@set -e; $(MAKEDEP) $< | sed 's/\($*\)\.o[ :]*/\1.o $@ : /g' > $@; [ -s $@ ] || rm -f $@
+
+.PHONY: clean recurse nothing compile lib prog 
+
+.SILENT:
+
+clean:
+	@printf "Cleaning   %s\n" `pwd`
+	@rm -f $(OBJECTS) $(DEPENDS) *~ *.aps *.out
+	@if test -n "$(SUBDIRS)"; then \
+		for i in $(SUBDIRS)""; do \
+			if test -d $$i -a -f $$i/Makefile; then \
+				$(MAKE) -C $$i clean; \
+			fi \
+		done \
+	fi	
+
+recurse:
+	@if test -n "$(SUBDIRS)"; then \
+		for i in $(SUBDIRS)""; do \
+			if test -d $$i -a -f $$i/Makefile; then \
+				printf "Entering  %s\n" `pwd`/$$i; \
+				$(MAKE) -C $$i; \
+				printf "Leaving   %s\n" `pwd`/$$i; \
+			else \
+				printf "Skipping  %s\n" `pwd`/$$i; \
+			fi \
+		 done \
+	fi
+
+lib: recurse compile 
+	@if test -n "$(OBJECTS)"; then \
+		printf "Updating   %s\n" $(ARCHIVE); \
+		ar r $(LIB)/$(ARCHIVE) $(OBJECTS); \
+	fi
+
+
+prog: recurse compile
+	@if test -z "$(NAME)"; then \
+		for i in $(PROGRAMS)""; do \
+		   if test -n "$$i"; then \
+				printf "Linking    %s\n" $$i$(EXE); \
+				$(CXX) $$i.o $(CXXLIBS) -o $(BIN)/$$i$(EXE); \
+		 	fi \
+		done \
+	else \
+		printf "Linking    %s\n" $(NAME)$(EXE); \
+		$(CXX) $(OBJECTS) $(CXXLIBS) -o $(BIN)/$(NAME)$(EXE); \
+	fi
+
+test: prog
+	@if test -z "$(NAME)"; then \
+		for i in $(PROGRAMS)""; do \
+		   if test -n "$$i"; then \
+				printf "Testing    %-20s...  " $$i$(EXE); \
+				$(BIN)/$$i$(EXE) > $$i.out; \
+				if (cmp -s $$i.ok $$i.out); then \
+					printf "PASS\n"; \
+				else \
+					printf "FAIL\n"; \
+					diff $$i.ok $$i.out; \
+				fi \
+		 	fi \
+		done \
+	else \
+		printf "Testing    %-20s... " $(NAME)$(EXE); \
+		$(BIN)/$(NAME)$(EXE) > $$i.out; \
+	fi
+
+
+nothing:
+
+resetlog:
+	rm -f .log
+
+compile: resetlog $(DEPENDS) $(OBJECTS)
+	

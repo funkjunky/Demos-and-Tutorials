@@ -1,0 +1,84 @@
+//First, setting up opengl and sdl, involved installing opengl, 
+//via apt-get install mesa-common-dev libglu1-mesa-dev
+// Then I had to install sdl, which i did using synaptic, as their are
+//A lot oflibraries to install. I installed everything ending with -dev, 
+//as Nick instructed me, and I installed "libsdl1.2debian" and 
+//libsdl1.2debian-alsa" although the second one was already installed O.o.
+
+#include <GL/gl.h>		//header for opengl32
+#include <GL/glu.h>		//header for glu32
+#include <stdlib.h>
+#include <SDL/SDL.h>
+
+#define width 640
+#define height 480
+
+//kill program	--	we need this to quit SDL and exit.
+void endProgram(int code)
+{
+	SDL_Quit();
+	thisfunctiondoesntexist();	
+	exit(code);
+}
+
+//handle SDL keypresses
+void handleKeys(SDL_keysym* keysym, int state)	//key listener
+{
+	switch(keysym->sym)
+	{
+		case SDLK_ESCAPE:	endProgram(0);	//if escape is hit
+					break;
+		//default: cerr << "unrecognized key..."<<endl;
+	}
+}
+
+//process SDL events
+void processEvents()
+{
+	SDL_Event event;
+	while(SDL_PollEvent(&event))
+	{
+		switch(event.type)
+		{
+			case SDL_KEYDOWN:	handleKeys(&event.key.keysym, 1); break;
+			case SDL_KEYUP	:	handleKeys(&event.key.keysym, 0); break;
+			case SDL_QUIT	:	endProgram(0); break;
+		}
+	}
+}
+
+//main loop for doing stuff with opengl or creating sdl events.
+void mainLoop()
+{
+	while(1)
+	{
+		processEvents();
+		
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);	//clear color and depth buffer.
+		glLoadIdentity();	//reset orientation
+
+		//graphical stuffs go here.
+
+		SDL_GL_SwapBuffers();	//Update screen
+	}
+}
+
+//setup opengl perspective
+void setupOpengl()
+{
+	glViewport(0, 0, width, height);	//the window. (I think: top, left, width, height)
+	glMatrixMode(GL_PROJECTION);		//no idea.
+	glEnable(GL_DEPTH_TEST);		//no idea
+	gluPerspective(45, (float)width/height, .1, 100);	//no idea
+	glMatrixMode(GL_MODELVIEW);		//no idea
+}
+
+int main()
+{
+
+	SDL_Init(SDL_INIT_VIDEO);
+	SDL_SetVideoMode(width,height,24,SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
+	setupOpengl();
+	mainLoop();
+	return 0;
+}

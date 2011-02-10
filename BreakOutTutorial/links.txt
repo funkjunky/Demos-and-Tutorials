@@ -1,0 +1,14 @@
+SDL wiki: http://en.wikipedia.org/wiki/Simple_DirectMedia_Layer
+SDL-Audio: http://www.devshed.com/c/a/Multimedia/Learning-Sound-for-Game-Programming-using-SDL/
+openAL: http://en.wikipedia.org/wiki/OpenAL
+GLSL: http://en.wikipedia.org/wiki/GLSL
+Shaders: http://en.wikipedia.org/wiki/Shader_Model
+
+irrlicht: http://irrlicht.sourceforge.net/docu/index.html
+ogre3D: http://en.wikipedia.org/wiki/OGRE_Engine
+
+directX: http://en.wikipedia.org/wiki/Direct_X
+XNA: http://en.wikipedia.org/wiki/Microsoft_XNA
+
+c++: http://en.wikipedia.org/wiki/C%2B%2B
+I recommend c++ in a nutshell as a reference guide.

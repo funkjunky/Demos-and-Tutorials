@@ -1,0 +1,110 @@
+#include <iostream>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+
+using namespace std;
+
+class mygl
+{
+public:
+	mygl()
+	{
+		upheld=0;
+		downheld=0;
+		 rightheld=0;
+		 leftheld=0;
+		 forwardheld=0;
+		 backheld=0;
+		 x=0;
+		 y=0;
+		 z=0;
+		 atexture=0;
+		 height=0;
+		 width=0;
+	}
+
+	void processevents();
+	
+	void processevents()
+	{
+		SDL_Event event;
+		while(SDL_PollEvent(&event))
+		{
+			switch(event.type)
+			{
+				case SDL_KEYDOWN:	handleKeys(&event.key.keysym, true); break;	
+				case SDL_KEYUP	:	handleKeys(&event.key.keysym, false); break;
+				case SDL_QUIT	:	endProgram(0); break;
+			}
+		}
+	}
+private:
+void handlekeys(SDL_keysym*, bool);
+void setupGL();
+
+	void setupGL()
+	{
+		glViewPort(0,0,width,height);
+		glMatrixMode(GL_PROJECTION);	//specifies the stack to be used.
+		glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+		glEnable(GL_BLEND);
+		//glEnable(GL_DEPTH_TEST);
+		//allows depth buffer to distinguish between surfaces.
+		gluPerspective(45, (float)width/height, .1, 100);
+
+		//setup textures			
+		glEnable(GL_TEXTURE_2D);
+		//add the textures here or something...
+	
+		//setup lights
+
+		//setup fog
+
+		//cool drawing effects like grids?
+		glPolygonMode(GL_BACK, GL_FILL);
+		glPolygonMode(GL_FRONT, GL_LINE);
+	}
+
+	//handle SDL keypresses
+	void handlekeys(SDL_keysym* keysym, bool state)	//key listener. 
+	{						//State could be considered whether the key was pressed or released.
+
+		switch(keysym->sym)	//this holds the key that triggered the event.		
+		{
+			case SDLK_PAGEDOWN:	downheld=state;	break;
+			case SDLK_PAGEUP:	forwardheld=state;	break;
+			case SDLK_LEFT:		leftheld=state;	break;
+			case SDLK_RIGHT: 	rightheld=state;	break;
+			case SDLK_DOWN:		downheld=state;	break;
+			case SDLK_UP:		upheld=state;	break;
+			case SDLK_ESCAPE:	endProgram(0);	//if escape is hit
+						break;
+			default: cerr << "unrecognized key..."<<endl;
+		}
+	}
+
+
+	/**some class variables**/
+	bool fogon;
+	bool blendon;
+	bool lighton;
+
+	bool upheld;
+	bool downheld;
+	bool rightheld;
+	bool leftheld;
+	bool forwardheld;
+	bool backheld;
+	int x;
+	int y;
+	int z;
+	GLuint atexture;
+	int height;
+	int width;
+};
+
+int main()
+{
+}

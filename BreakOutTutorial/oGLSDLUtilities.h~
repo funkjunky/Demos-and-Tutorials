@@ -1,0 +1,22 @@
+//////////////////////////
+//standard library	//
+//////////////////////////
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <utility>
+
+//////////////////////////
+//openGL library	//
+//////////////////////////
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+
+using namespace std;
+////////////////////////////////////
+/*this begins out normal functions*/
+////////////////////////////////////
+
+

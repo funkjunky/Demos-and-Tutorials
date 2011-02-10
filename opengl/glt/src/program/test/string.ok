@@ -1,0 +1,70 @@
+fromHex4('0')= 0
+fromHex4('1')= 1
+fromHex4('2')= 2
+fromHex4('3')= 3
+fromHex4('4')= 4
+fromHex4('5')= 5
+fromHex4('6')= 6
+fromHex4('7')= 7
+fromHex4('8')= 8
+fromHex4('9')= 9
+fromHex4('a')= 10
+fromHex4('A')= 10
+fromHex4('b')= 11
+fromHex4('B')= 11
+fromHex4('c')= 12
+fromHex4('C')= 12
+fromHex4('d')= 13
+fromHex4('D')= 13
+fromHex4('e')= 14
+fromHex4('E')= 14
+fromHex4('f')= 15
+fromHex4('F')= 15
+toHex4( 0)= 0
+toHex4( 1)= 1
+toHex4( 2)= 2
+toHex4( 3)= 3
+toHex4( 4)= 4
+toHex4( 5)= 5
+toHex4( 6)= 6
+toHex4( 7)= 7
+toHex4( 8)= 8
+toHex4( 9)= 9
+toHex4(10)= A
+toHex4(11)= B
+toHex4(12)= C
+toHex4(13)= D
+toHex4(14)= E
+toHex4(15)= F
+atof("   0.001")= 0.001
+atof("  -0.001")= -0.001
+atof(" 100.001")= 100.001
+atof("-100.001")= -100.001
+atof("    1e10")= 1e+10
+atof("   1e-10")= 1e-10
+atoi("-123456")= -123456
+atoi("      0")= 0
+atoi(" 123456")= 123456
+atol("-1234567890")= -1234567890
+atol("+1234567890")= 1234567890
+atob("false")= 0
+atob("true")= 1
+atob("0")= 0
+atob("1")= 1
+atob("-1")= 1
+atoc("1,2,3,4,5",atoi,"+-0123456789",tmp.begin(),tmp.end())= 5
+1,2,3,4,5
+atoc("+1,-2,+3,-4,+5",atoi,"+-0123456789",tmp.begin(),tmp.end())= 5
+1,-2,3,-4,5
+atoc("true false 1 0 -1",atob,"+-01truefalse",tmp.begin(),tmp.end())= 5
+1,0,1,0,1
+stringSplit(tmp,"One Two Three Four Five"," ")= 1
+One,Two,Three,Four,Five
+stringMerge(tmp,tmp2," ")= 1
+One Two Three Four Five
+{
+0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09
+};
+{
+0x30,0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0x61,0x62,0x63,0x64,0x65
+};
